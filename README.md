@@ -39,20 +39,27 @@ void loop(){
         // b.ledOn(3, 255, 255, 255);
         int zVal = b.readZ();
         
-        int initVal = initial + 30;
+        //setting the height value
+        int initVal = initial + 20;
+        Particle.publish("check", String(initVal));
         if (zVal > initVal) {
             zVal = initial;
             
             jumpCount += 1;
+            //calculating the %
             numberChanged = (jumpCount / num) * 100 ;
+            //changing the light acc to jump couunt %
             Particle.publish("jumpCount", String(jumpCount));
             
             delay(1000);
              
-             for (int a = 1; a <= (numberChanged / 10); a++) {
-                 b.ledOn(a, 100, 50, 50);
+             //detecting the no. of change
+             for (int a = 1; a <= (numberChanged / 11); a++) {
+                 //turning on the lights acc to the enumaration
+                 b.ledOn(a, 100, 100, 50);
              }
              
+             //if goal complete then do this
              if(numberChanged == 100)
               {
                   num = 0;
@@ -60,8 +67,11 @@ void loop(){
                   numberChanged = 0;
                   delay(200);
                   b.allLedsOn(124,252,0);
-                  delay(800);
-                
+                  delay(1000);
+                   b.allLedsOff();
+                   b.allLedsOn(124,252,0);
+                   
+                  delay(2000);
                   b.allLedsOff();
               }
         }
